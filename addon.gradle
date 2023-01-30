@@ -1,12 +1,6 @@
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'com.google.devtools.ksp'
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = 1.8
-    }
-}
-
 kotlin {
     sourceSets {
         main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
