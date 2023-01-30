@@ -6,8 +6,7 @@ import com.muxiu1997.sharewhereiam.Tags
 import cpw.mods.fml.common.network.NetworkRegistry
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
 
-@JvmField
-val network: SimpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MODID)
+@JvmField val network: SimpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MODID)
 
 interface IServerSideHandler
 

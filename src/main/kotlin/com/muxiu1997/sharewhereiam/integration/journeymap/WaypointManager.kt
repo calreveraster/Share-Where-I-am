@@ -7,37 +7,39 @@ import net.minecraft.client.Minecraft
 
 @SideOnly(Side.CLIENT)
 object WaypointManager {
-    var tempBeacon: Waypoint? = null
-        private set
+  var tempBeacon: Waypoint? = null
+    private set
 
-    private val transientBeaconCache = mutableMapOf<String, TransientBeacon>()
+  private val transientBeaconCache = mutableMapOf<String, TransientBeacon>()
 
-    fun hasActiveTempBeacon(): Boolean {
-        return tempBeacon != null
+  fun hasActiveTempBeacon(): Boolean {
+    return tempBeacon != null
+  }
+
+  fun clearActiveTempBeacon() {
+    tempBeacon = null
+  }
+
+  fun toggleActiveTempBeacon(waypoint: Waypoint) {
+    if (waypoint == this.tempBeacon) {
+      this.tempBeacon = null
+      return
     }
+    this.tempBeacon = waypoint
+  }
 
-    fun clearActiveTempBeacon() {
-        tempBeacon = null
-    }
+  fun addTransientBeacon(playerName: String, waypoint: Waypoint) {
+    transientBeaconCache[playerName] = TransientBeacon(waypoint, Minecraft.getSystemTime())
+  }
 
-    fun toggleActiveTempBeacon(waypoint: Waypoint) {
-        if (waypoint == this.tempBeacon) {
-            this.tempBeacon = null
-            return
+  fun getTransientBeacons(): List<Waypoint> {
+    transientBeaconCache
+        .filterValues { transientBeacon ->
+          Minecraft.getSystemTime() - transientBeacon.start > 3000
         }
-        this.tempBeacon = waypoint
-    }
+        .forEach { (playerName, _) -> transientBeaconCache.remove(playerName) }
+    return transientBeaconCache.values.map { it.waypoint }
+  }
 
-    fun addTransientBeacon(playerName: String, waypoint: Waypoint) {
-        transientBeaconCache[playerName] = TransientBeacon(waypoint, Minecraft.getSystemTime())
-    }
-
-    fun getTransientBeacons(): List<Waypoint> {
-        transientBeaconCache
-            .filterValues { transientBeacon -> Minecraft.getSystemTime() - transientBeacon.start > 3000 }
-            .forEach { (playerName, _) -> transientBeaconCache.remove(playerName) }
-        return transientBeaconCache.values.map { it.waypoint }
-    }
-
-    data class TransientBeacon(val waypoint: Waypoint, val start: Long)
+  data class TransientBeacon(val waypoint: Waypoint, val start: Long)
 }

@@ -5,8 +5,8 @@ import cpw.mods.fml.common.FMLCommonHandler
 import net.minecraftforge.common.MinecraftForge
 
 object EventLoader {
-    fun load() {
-        MinecraftForge.EVENT_BUS.register(EventHandler)
-        FMLCommonHandler.instance().bus().register(EventHandler)
-    }
+  fun load() {
+    MinecraftForge.EVENT_BUS.register(EventHandler)
+    FMLCommonHandler.instance().bus().register(EventHandler)
+  }
 }

@@ -8,66 +8,60 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
 import io.netty.buffer.ByteBuf
-import journeymap.client.cartography.RGB
 import journeymap.client.model.Waypoint
-import net.minecraft.client.Minecraft
 
 class MessageShareWaypoint : IMessage {
-    lateinit var playerName: String
-    lateinit var waypointJson: String
-    lateinit var additionalInformation: String
+  lateinit var playerName: String
+  lateinit var waypointJson: String
+  lateinit var additionalInformation: String
 
-    @Suppress("unused")
-    constructor()
+  @Suppress("unused") constructor()
 
-    @SideOnly(Side.CLIENT)
-    constructor(playerWaypoint: WaypointUtil.PlayerWaypoint) : this(
-        playerWaypoint,
-        ""
-    )
+  @SideOnly(Side.CLIENT)
+  constructor(playerWaypoint: WaypointUtil.PlayerWaypoint) : this(playerWaypoint, "")
 
-    @SideOnly(Side.CLIENT)
-    constructor(playerWaypoint: WaypointUtil.PlayerWaypoint, additionalInformation: String) {
-        this.playerName = playerWaypoint.player.displayName
-        this.waypointJson = playerWaypoint.waypoint.toString()
-        this.additionalInformation = additionalInformation
-    }
+  @SideOnly(Side.CLIENT)
+  constructor(playerWaypoint: WaypointUtil.PlayerWaypoint, additionalInformation: String) {
+    this.playerName = playerWaypoint.player.displayName
+    this.waypointJson = playerWaypoint.waypoint.toString()
+    this.additionalInformation = additionalInformation
+  }
 
-    override fun fromBytes(buf: ByteBuf) {
-        playerName = ByteBufUtils.readUTF8String(buf)
-        waypointJson = ByteBufUtils.readUTF8String(buf)
-        additionalInformation = ByteBufUtils.readUTF8String(buf)
-    }
+  override fun fromBytes(buf: ByteBuf) {
+    playerName = ByteBufUtils.readUTF8String(buf)
+    waypointJson = ByteBufUtils.readUTF8String(buf)
+    additionalInformation = ByteBufUtils.readUTF8String(buf)
+  }
 
-    override fun toBytes(buf: ByteBuf) {
-        ByteBufUtils.writeUTF8String(buf, playerName)
-        ByteBufUtils.writeUTF8String(buf, waypointJson)
-        ByteBufUtils.writeUTF8String(buf, additionalInformation)
-    }
+  override fun toBytes(buf: ByteBuf) {
+    ByteBufUtils.writeUTF8String(buf, playerName)
+    ByteBufUtils.writeUTF8String(buf, waypointJson)
+    ByteBufUtils.writeUTF8String(buf, additionalInformation)
+  }
 
-    companion object {
-        object Handler : IMessageHandler<MessageShareWaypoint, IMessage?>, IClientSideHandler, IServerSideHandler {
-            override fun onMessage(message: MessageShareWaypoint, ctx: MessageContext): IMessage? {
-                if (ctx.side.isClient) {
-                    handleClientSideMessage(message)
-                } else {
-                    handleServerSideMessage(message)
-                }
-                return null
-            }
-
-            @SideOnly(Side.CLIENT)
-            private fun handleClientSideMessage(message: MessageShareWaypoint) {
-                WaypointUtil.addShareWaypointChat(
-                    message.playerName,
-                    Waypoint.fromString(message.waypointJson),
-                    message.additionalInformation
-                )
-            }
-
-            private fun handleServerSideMessage(message: MessageShareWaypoint) {
-                network.sendToAll(message)
-            }
+  companion object {
+    object Handler :
+        IMessageHandler<MessageShareWaypoint, IMessage?>, IClientSideHandler, IServerSideHandler {
+      override fun onMessage(message: MessageShareWaypoint, ctx: MessageContext): IMessage? {
+        if (ctx.side.isClient) {
+          handleClientSideMessage(message)
+        } else {
+          handleServerSideMessage(message)
         }
+        return null
+      }
+
+      @SideOnly(Side.CLIENT)
+      private fun handleClientSideMessage(message: MessageShareWaypoint) {
+        WaypointUtil.addShareWaypointChat(
+            message.playerName,
+            Waypoint.fromString(message.waypointJson),
+            message.additionalInformation)
+      }
+
+      private fun handleServerSideMessage(message: MessageShareWaypoint) {
+        network.sendToAll(message)
+      }
     }
+  }
 }

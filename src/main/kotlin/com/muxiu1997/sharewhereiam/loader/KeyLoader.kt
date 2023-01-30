@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.SideOnly
 
 @SideOnly(Side.CLIENT)
 object KeyLoader {
-    fun clientLoad() {
-        ClientRegistry.registerKeyBinding(KeyShare)
-    }
+  fun clientLoad() {
+    ClientRegistry.registerKeyBinding(KeyShare)
+  }
 }

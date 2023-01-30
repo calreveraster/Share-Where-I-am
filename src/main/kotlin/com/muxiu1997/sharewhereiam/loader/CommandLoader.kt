@@ -8,10 +8,10 @@ import cpw.mods.fml.relauncher.SideOnly
 import net.minecraftforge.client.ClientCommandHandler
 
 object CommandLoader {
-    @SideOnly(Side.CLIENT)
-    fun clientLoad() {
-        ClientCommandHandler.instance.registerCommand(CommandWaypointSave)
-        ClientCommandHandler.instance.registerCommand(CommandWaypointShareLocation)
-        ClientCommandHandler.instance.registerCommand(CommandWaypointToggleTempBeacon)
-    }
+  @SideOnly(Side.CLIENT)
+  fun clientLoad() {
+    ClientCommandHandler.instance.registerCommand(CommandWaypointSave)
+    ClientCommandHandler.instance.registerCommand(CommandWaypointShareLocation)
+    ClientCommandHandler.instance.registerCommand(CommandWaypointToggleTempBeacon)
+  }
 }
