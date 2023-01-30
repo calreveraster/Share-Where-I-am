@@ -166,6 +166,9 @@ pluginManager.withPlugin('org.jetbrains.kotlin.jvm') {
         "kaptMcLauncherKotlin",
         "kaptPatchedMcKotlin",
         "kaptInjectedTagsKotlin",
+        "kspMcLauncherKotlin",
+        "kspPatchedMcKotlin",
+        "kspInjectedTagsKotlin",
     ]
     tasks.configureEach { task ->
         if (task.name in disabledKotlinTaskList) {
